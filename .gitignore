@@ -1,0 +1,5 @@
+# Built app
+dist/
+
+# dependencies
+node_modules/

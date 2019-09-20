@@ -1,0 +1,49 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": true,
+        "outDir": "./dist/assets",
+        "strict": true,
+        "moduleResolution": "node",
+        "allowJs": false,
+        "checkJs": false,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "alwaysStrict": true,
+        "forceConsistentCasingInFileNames": true,
+        "strictPropertyInitialization": false,
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "resolveJsonModule": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "removeComments": true,
+        "typeRoots": [
+            "./types",
+            "./node_modules/@types"
+        ],
+        "jsx": "react"
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules",
+        "tests"
+    ],
+    "types": [
+      "node",
+      "webpack",
+      "react",
+      "react-dom",
+      "reactstrap"
+    ]
+}

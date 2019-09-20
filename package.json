@@ -1,0 +1,51 @@
+{
+    "name": "know-your-neighborhood",
+    "description": "Frontend part of Know Your Neighborhood application",
+    "version": "0.0.1",
+    "private": true,
+    "author": {
+        "name": "Andrzej Wojtys",
+        "email": "arhimenrius@gmail.com"
+    },
+    "main": "",
+    "scripts": {
+        "build": "npx webpack --config webpack.dev.js",
+        "start:dev": "webpack-dev-server --open -d --watch --config webpack.dev.js"
+    },
+    "dependencies": {
+        "bootstrap": "4.3.1",
+        "leaflet": "1.5.1",
+        "react": "16.9.0",
+        "react-dom": "16.9.0",
+        "react-router": "5.0.1",
+        "react-router-dom": "5.0.1",
+        "leaflet-react": "3.0.5",
+        "reactstrap": "8.0.1",
+        "css-loader": "3.2.0",
+        "style-loader": "1.0.0",
+        "sass-loader": "7.2.0",
+        "node-sass": "4.12.0",
+        "url-loader": "2.1.0"
+    },
+    "devDependencies": {
+        "typescript": "3.4.3",
+        "source-map-loader": "0.2.4",
+        "@types/reactstrap": "5.0.23",
+        "@types/react": "16.8.24",
+        "@types/react-dom": "16.0.5",
+        "@types/react-router": "4.0.24",
+        "@types/react-router-dom": "4.2.6",
+        "@types/react-leaflet": "1.1.5",
+        "@types/jest": "22.2.3",
+        "tslint": "5.18.0",
+        "tslint-react": "4.0.0",
+        "ts-loader": "6.0.4",
+        "webpack": "4.39.1",
+        "webpack-cli": "3.3.6",
+        "webpack-dev-server": "3.8.0",
+        "react-jest": "0.2.1",
+        "html-webpack-plugin": "3.2.0",
+        "html-webpack-root-plugin": "0.10.0",
+        "clean-webpack-plugin": "3.0.0"
+    }
+}
