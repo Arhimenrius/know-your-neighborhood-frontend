@@ -1,0 +1,16 @@
+#search-container {
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+    max-height: 50vh;
+    background: #818589;
+    padding: 10px;
+    box-shadow: 0 0 10px #000000;
+    border-radius: 0 0 5px 5px;
+
+    @include for-desktops-up {
+        width: 400px;
+        max-height: 100%;
+        overflow-y: auto;
+    }
+}

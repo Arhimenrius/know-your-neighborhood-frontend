@@ -5,10 +5,12 @@ import {
 import { NavLink as RRNavLink } from 'react-router-dom';
 import NavRouteLink from './NavRouteLink';
 
-export default class NavBar extends React.Component {
-    public state: { isOpen: boolean };
+interface ComponentState {
+    isOpen: boolean;
+}
 
-    constructor(props: { [name: string]: any }) {
+export default class NavBar extends React.Component<{}, ComponentState> {
+    constructor(props: {}) {
         super(props);
         this.state = { isOpen: false };
 

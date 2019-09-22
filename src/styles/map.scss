@@ -1,7 +1,17 @@
-.map {
+.map-container {
     overflow: hidden;
     position: absolute;
     top: 55px;
     bottom: 0;
     width: 100%;
+    z-index: -1;
+}
+
+.map {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: -1;
 }
