@@ -9,6 +9,7 @@ interface ISearchData {
 
 interface ComponentState {
     searchData: ISearchData;
+    displayMoreOptions: boolean
 }
 
 interface ExpectedProps {
@@ -22,10 +23,14 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
 
     constructor(props: ExpectedProps) {
         super(props);
-        this.state = { searchData: { checkAddress: '', targetAddress: '', detailsToDisplay: [] } };
+        this.state = {
+            searchData: { checkAddress: '', targetAddress: '', detailsToDisplay: [] },
+            displayMoreOptions: false,
+        };
 
         this.handleOnAddressChange = this.handleOnAddressChange.bind(this);
         this.handleOnSubmit = this.handleOnSubmit.bind(this);
+        this.handleOnChangeMoreOptions = this.handleOnChangeMoreOptions.bind(this);
     }
 
     handleOnSubmit(event: {preventDefault: CallableFunction}) {
@@ -56,17 +61,43 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
         }
     }
 
+    handleOnChangeMoreOptions(event: {target: {checked: boolean}}) {
+        const { target } = event;
+        const { checked } = target;
+
+        this.setState(() => ({
+            displayMoreOptions: checked,
+        }));
+    }
+
     render() {
+        const { displayMoreOptions } = this.state;
+
         return (
-            <div id="search-container">
+            <div id="search-container" className="bg-dark clearfix">
                 <form onSubmit={this.handleOnSubmit}>
-                    <AddressesInputs
-                        checkAddressInputName={this.checkAddressInputName}
-                        targetAddressInputName={this.targetAddressInputName}
-                        onAddressValueChange={this.handleOnAddressChange}
-                        displayTargetAddress={false}
-                    />
-                    <button type="submit">Submit</button>
+                    <div className="selection-container">
+                        <AddressesInputs
+                            checkAddressInputName={this.checkAddressInputName}
+                            targetAddressInputName={this.targetAddressInputName}
+                            onAddressValueChange={this.handleOnAddressChange}
+                            displayTargetAddress={false}
+                        />
+                        <div className={`selection-extra-options ${displayMoreOptions ? '' : 'd-none'}`}>
+                            Test content
+                        </div>
+                    </div>
+                    <div className="options-container">
+                        <div>
+                            <button type="submit" className="btn btn-primary">Submit</button>
+                            <div className="form-check">
+                                <label className="form-check-label" htmlFor="more-options">
+                                    <input className="form-check-input" type="checkbox" value="" id="more-options" onChange={this.handleOnChangeMoreOptions} />
+                                    More options
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         );

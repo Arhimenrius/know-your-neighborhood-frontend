@@ -22,8 +22,8 @@ export default class AddressesInputs extends React.Component<ExpectedProps> {
     renderCheckAddressOnly() {
         const { checkAddressInputName } = this.props;
         return (
-            <div>
-                <input type="text" name={checkAddressInputName} id="check-address" placeholder="Check address" onChange={this.onChange} />
+            <div className="address-inputs">
+                <input type="text" name={checkAddressInputName} className="form-control" id="check-address" placeholder="Check address" onChange={this.onChange} />
             </div>
         );
     }
@@ -31,9 +31,9 @@ export default class AddressesInputs extends React.Component<ExpectedProps> {
     renderCheckAndTargetAddress() {
         const { checkAddressInputName, targetAddressInputName } = this.props;
         return (
-            <div>
-                <input type="text" name={checkAddressInputName} id="check-address" placeholder="Check address" onChange={this.onChange} />
-                <input type="text" name={targetAddressInputName} id="target-address" placeholder="Target address" onChange={this.onChange} />
+            <div className="address-inputs">
+                <input type="text" name={checkAddressInputName} className="form-control" id="check-address" placeholder="Check address" onChange={this.onChange} />
+                <input type="text" name={targetAddressInputName} className="form-control" id="target-address" placeholder="Target address" onChange={this.onChange} />
             </div>
         );
     }
