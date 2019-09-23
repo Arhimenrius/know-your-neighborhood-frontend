@@ -19,7 +19,9 @@ module.exports = {
       "import/no-extraneous-dependencies": [2, { devDependencies: ["**/test.tsx", "**/test.ts"] }],
       "@typescript-eslint/indent": [2, 4],
       "react/jsx-indent": [2, 4],
-      "react/jsx-indent-props": [2, 4]
+      "react/jsx-indent-props": [2, 4],
+      "jsx-a11y/label-has-associated-control": 0,
+      "jsx-a11y/label-has-for": 0
       
     },
     settings: {

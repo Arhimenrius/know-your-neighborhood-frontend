@@ -24,6 +24,7 @@ module.exports = {
             React: 'react',
             ReactDOM: 'react-dom',
             Reactstrap: 'reactstrap',
+            ReactSelect: 'react-select',
         }),
         new HtmlWebpackRootPlugin(),
         new CleanWebpackPlugin(),

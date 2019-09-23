@@ -1,10 +1,12 @@
 import * as React from 'react';
 import AddressesInputs from './AddressesInputs';
+import MoreOptionsInputs from './MoreOptionsInputs';
 
 interface ISearchData {
     checkAddress: string;
     targetAddress: string;
-    detailsToDisplay: string[];
+    servicesToDisplay: string[];
+    otherOptions: {[optionName: string]: boolean|string|null}
 }
 
 interface ComponentState {
@@ -17,6 +19,10 @@ interface ExpectedProps {
 }
 
 export default class SearchForm extends React.Component<ExpectedProps, ComponentState> {
+    private optionsRequiringTargetAddress= [
+        'show-public-transport-connection',
+    ];
+
     private checkAddressInputName = 'check-address';
 
     private targetAddressInputName = 'target-address';
@@ -24,24 +30,20 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
     constructor(props: ExpectedProps) {
         super(props);
         this.state = {
-            searchData: { checkAddress: '', targetAddress: '', detailsToDisplay: [] },
+            searchData: {
+                checkAddress: '',
+                targetAddress: '',
+                servicesToDisplay: [],
+                otherOptions: {},
+            },
             displayMoreOptions: false,
         };
 
         this.handleOnAddressChange = this.handleOnAddressChange.bind(this);
         this.handleOnSubmit = this.handleOnSubmit.bind(this);
         this.handleOnChangeMoreOptions = this.handleOnChangeMoreOptions.bind(this);
-    }
-
-    handleOnSubmit(event: {preventDefault: CallableFunction}) {
-        const { onSearchResultsReceived } = this.props;
-        const { searchData } = this.state;
-        onSearchResultsReceived(
-            fetch(`https://jsonplaceholder.typicode.com/todos/${searchData.checkAddress}`)
-                .then(response => response.json())
-                .then(json => { console.log(json); return json; }),
-        );
-        event.preventDefault();
+        this.handleOnServicesToDisplayChanged = this.handleOnServicesToDisplayChanged.bind(this);
+        this.handleOnOtherOptionChanged = this.handleOnOtherOptionChanged.bind(this);
     }
 
     handleOnAddressChange(addressType: string, value: string): void {
@@ -61,6 +63,23 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
         }
     }
 
+    handleOnServicesToDisplayChanged(services: string[]): void {
+        this.setState((prevState: Readonly<ComponentState>) => ({
+            searchData: { ...prevState.searchData, servicesToDisplay: services },
+        }));
+    }
+
+    handleOnOtherOptionChanged(optionName: string, value: string|boolean|null): void {
+        this.setState((prevState: Readonly<ComponentState>) => {
+            const { otherOptions } = prevState.searchData;
+            otherOptions[optionName] = value;
+
+            return {
+                searchData: { ...prevState.searchData, otherOptions },
+            };
+        });
+    }
+
     handleOnChangeMoreOptions(event: {target: {checked: boolean}}) {
         const { target } = event;
         const { checked } = target;
@@ -68,6 +87,32 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
         this.setState(() => ({
             displayMoreOptions: checked,
         }));
+    }
+
+    handleOnSubmit(event: {preventDefault: CallableFunction}) {
+        const { onSearchResultsReceived } = this.props;
+        const { searchData } = this.state;
+
+        onSearchResultsReceived(
+            fetch(`https://jsonplaceholder.typicode.com/todos/${searchData.checkAddress}`)
+                .then(response => response.json())
+                .then(json => { console.log(json); return json; }),
+        );
+        event.preventDefault();
+    }
+
+    shouldTargetAddressBeDisplayed(): boolean {
+        const { searchData } = this.state;
+        let optionFound = false;
+        this.optionsRequiringTargetAddress.forEach((option: string) => {
+            if (Object.prototype.hasOwnProperty.call(searchData.otherOptions, option)
+                && searchData.otherOptions[option]
+            ) {
+                optionFound = true;
+            }
+        });
+
+        return optionFound;
     }
 
     render() {
@@ -81,11 +126,13 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
                             checkAddressInputName={this.checkAddressInputName}
                             targetAddressInputName={this.targetAddressInputName}
                             onAddressValueChange={this.handleOnAddressChange}
-                            displayTargetAddress={false}
+                            displayTargetAddress={this.shouldTargetAddressBeDisplayed()}
                         />
-                        <div className={`selection-extra-options ${displayMoreOptions ? '' : 'd-none'}`}>
-                            Test content
-                        </div>
+                        <MoreOptionsInputs
+                            displayMoreOptions={displayMoreOptions}
+                            onServicesToDisplayChanged={this.handleOnServicesToDisplayChanged}
+                            onOtherOptionChanged={this.handleOnOtherOptionChanged}
+                        />
                     </div>
                     <div className="options-container">
                         <div>
