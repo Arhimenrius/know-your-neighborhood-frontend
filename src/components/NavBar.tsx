@@ -17,13 +17,13 @@ export default class NavBar extends React.Component<{}, ComponentState> {
         this.toggle = this.toggle.bind(this);
     }
 
-    toggle() {
+    private toggle() {
         this.setState((state: {isOpen: boolean}) => ({
             isOpen: !state.isOpen,
         }));
     }
 
-    render() {
+    public render() {
         const { isOpen } = this.state;
         return (
             <Navbar color="dark" dark expand="md">

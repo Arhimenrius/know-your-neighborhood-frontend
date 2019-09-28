@@ -3,15 +3,16 @@ import AddressesInputs from './AddressesInputs';
 import MoreOptionsInputs from './MoreOptionsInputs';
 
 interface ISearchData {
-    checkAddress: string;
-    targetAddress: string;
+    checkAddress: {text: string, coordinates: {lat: number | null, lon: number | null}};
+    targetAddress: {text: string, coordinates: {lat: number | null, lon: number | null}};
     servicesToDisplay: string[];
-    otherOptions: {[optionName: string]: boolean|string|null}
+    otherOptions: {[optionName: string]: boolean | string | null}
 }
 
 interface ComponentState {
     searchData: ISearchData;
     displayMoreOptions: boolean
+
 }
 
 interface ExpectedProps {
@@ -19,20 +20,20 @@ interface ExpectedProps {
 }
 
 export default class SearchForm extends React.Component<ExpectedProps, ComponentState> {
-    private optionsRequiringTargetAddress= [
-        'show-public-transport-connection',
-    ];
+    // private readonly optionsRequiringTargetAddress = [
+    //     'show-public-transport-connection',
+    // ];
 
-    private checkAddressInputName = 'check-address';
+    private readonly checkAddressInputName = 'checkAddress';
 
-    private targetAddressInputName = 'target-address';
+    private readonly targetAddressInputName = 'targetAddress';
 
     constructor(props: ExpectedProps) {
         super(props);
         this.state = {
             searchData: {
-                checkAddress: '',
-                targetAddress: '',
+                checkAddress: { text: '', coordinates: { lat: null, lon: null } },
+                targetAddress: { text: '', coordinates: { lat: null, lon: null } },
                 servicesToDisplay: [],
                 otherOptions: {},
             },
@@ -46,7 +47,10 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
         this.handleOnOtherOptionChanged = this.handleOnOtherOptionChanged.bind(this);
     }
 
-    handleOnAddressChange(addressType: string, value: string): void {
+    private handleOnAddressChange(
+        addressType: string,
+        value: {text: string, coordinates: {lat: number, lon: number}},
+    ): void {
         switch (addressType) {
             case this.checkAddressInputName:
                 this.setState((prevState: Readonly<ComponentState>) => ({
@@ -63,13 +67,13 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
         }
     }
 
-    handleOnServicesToDisplayChanged(services: string[]): void {
+    private handleOnServicesToDisplayChanged(services: string[]): void {
         this.setState((prevState: Readonly<ComponentState>) => ({
             searchData: { ...prevState.searchData, servicesToDisplay: services },
         }));
     }
 
-    handleOnOtherOptionChanged(optionName: string, value: string|boolean|null): void {
+    private handleOnOtherOptionChanged(optionName: string, value: string | boolean | null): void {
         this.setState((prevState: Readonly<ComponentState>) => {
             const { otherOptions } = prevState.searchData;
             otherOptions[optionName] = value;
@@ -80,7 +84,7 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
         });
     }
 
-    handleOnChangeMoreOptions(event: {target: {checked: boolean}}) {
+    private handleOnChangeMoreOptions(event: {target: {checked: boolean}}) {
         const { target } = event;
         const { checked } = target;
 
@@ -89,33 +93,44 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
         }));
     }
 
-    handleOnSubmit(event: {preventDefault: CallableFunction}) {
+    private handleOnSubmit(event: {preventDefault: CallableFunction}) {
         const { onSearchResultsReceived } = this.props;
         const { searchData } = this.state;
 
+        const params: {[paramName: string]: number | null} = {
+            checkAddressLat: searchData.checkAddress.coordinates.lat,
+            checkAddressLon: searchData.checkAddress.coordinates.lon,
+            targetAddressLat: searchData.targetAddress.coordinates.lat,
+            targetAddressLon: searchData.targetAddress.coordinates.lon,
+        };
         onSearchResultsReceived(
-            fetch(`https://jsonplaceholder.typicode.com/todos/${searchData.checkAddress}`)
+            fetch('https://jsonplaceholder.typicode.com/todos?'
+                + `${Object.keys(params).map((paramName: string) => `${paramName}=${params[paramName]}`).join('&')}`)
                 .then(response => response.json())
-                .then(json => { console.log(json); return json; }),
+                .then(json => {
+                    console.log(json);
+                    return json;
+                }),
         );
         event.preventDefault();
     }
 
-    shouldTargetAddressBeDisplayed(): boolean {
-        const { searchData } = this.state;
-        let optionFound = false;
-        this.optionsRequiringTargetAddress.forEach((option: string) => {
-            if (Object.prototype.hasOwnProperty.call(searchData.otherOptions, option)
-                && searchData.otherOptions[option]
-            ) {
-                optionFound = true;
-            }
-        });
+    private shouldTargetAddressBeDisplayed(): boolean {
+        // const { searchData } = this.state;
+        // let optionFound = false;
+        // this.optionsRequiringTargetAddress.forEach((option: string) => {
+        //     if (Object.prototype.hasOwnProperty.call(searchData.otherOptions, option)
+        //         && searchData.otherOptions[option]
+        //     ) {
+        //         optionFound = true;
+        //     }
+        // });
 
-        return optionFound;
+        // return optionFound;
+        return true;
     }
 
-    render() {
+    public render() {
         const { displayMoreOptions } = this.state;
 
         return (
@@ -137,12 +152,18 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
                     <div className="options-container">
                         <div>
                             <button type="submit" className="btn btn-primary">Submit</button>
-                            <div className="form-check">
+                            {/* <div className="form-check">
                                 <label className="form-check-label" htmlFor="more-options">
-                                    <input className="form-check-input" type="checkbox" value="" id="more-options" onChange={this.handleOnChangeMoreOptions} />
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        value=""
+                                        id="more-options"
+                                        onChange={this.handleOnChangeMoreOptions}
+                                    />
                                     More options
                                 </label>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </form>

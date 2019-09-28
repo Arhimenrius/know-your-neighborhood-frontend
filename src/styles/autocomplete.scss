@@ -1,0 +1,17 @@
+.address-autocomplete-list {
+    background: white;
+    z-index: 9999999999999;
+    width: 100%;
+    top: 38px;
+    padding-left: 0px;
+
+    li {
+        list-style: none;
+        padding: 10px 5px;
+        cursor: pointer;
+    }
+
+    li:hover {
+        background: #dddddd;
+    }
+}

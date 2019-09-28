@@ -13,12 +13,12 @@ export default class KYNMap extends React.Component {
         zoom: 13,
     };
 
-    handleOnContextMenu() {
+    private handleOnContextMenu() {
         // @TODO replace this Placeholder
         Array.isArray(this);
     }
 
-    render() {
+    public render() {
         const { lat, lng, zoom } = this.state;
         const position: [number, number] = [lat, lng];
 

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import Select from 'react-select';
-import { ValueType } from 'react-select/src/types';
+import {ValueType} from 'react-select/src/types';
 
 interface ComponentProps {
     displayMoreOptions: boolean;
     onServicesToDisplayChanged: (services: string[]) => void;
-    onOtherOptionChanged: (optionName: string, value: string|boolean|null) => void;
+    onOtherOptionChanged: (optionName: string, value: string | boolean | null) => void;
 }
 
 export default class MoreOptionsInputs extends React.Component<ComponentProps> {
@@ -13,7 +13,7 @@ export default class MoreOptionsInputs extends React.Component<ComponentProps> {
 
     private servicesToDisplaySelectName = 'services-to-display';
 
-    private showPublicTransportConnectionInputName= 'show-public-transport-connection';
+    private showPublicTransportConnectionInputName = 'show-public-transport-connection';
 
     constructor(props: ComponentProps) {
         super(props);
@@ -21,21 +21,21 @@ export default class MoreOptionsInputs extends React.Component<ComponentProps> {
         this.handleOnOtherOptionChange = this.handleOnOtherOptionChange.bind(this);
     }
 
-    handleOnServicesToDisplayChange(values: ValueType<{ label: string; value: string }>) {
+    private handleOnServicesToDisplayChange(values: ValueType<{label: string; value: string}>) {
         if (!Array.isArray(values)) {
             throw new Error('Unexpected value passed after updating services to display');
         }
         const { onServicesToDisplayChanged } = this.props;
 
-        const listOfValues:{ label: string; value: string }[] = values;
+        const listOfValues: {label: string; value: string}[] = values;
 
         onServicesToDisplayChanged(
-            listOfValues.map((value: { label: string; value: string }) => value.value),
+            listOfValues.map((value: {label: string; value: string}) => value.value),
         );
     }
 
-    handleOnOtherOptionChange(
-        event: {target: {type: string, name: string, value: string|null, checked: boolean|null}},
+    private handleOnOtherOptionChange(
+        event: {target: {type: string, name: string, value: string | null, checked: boolean | null}},
     ) {
         const { target } = event;
         const { onOtherOptionChanged } = this.props;
@@ -46,7 +46,7 @@ export default class MoreOptionsInputs extends React.Component<ComponentProps> {
         }
     }
 
-    render() {
+    public render() {
         const { displayMoreOptions } = this.props;
 
         return (
