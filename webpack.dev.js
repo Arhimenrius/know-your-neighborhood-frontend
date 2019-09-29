@@ -11,7 +11,7 @@ module.exports = {
     devtool: 'source-map',
 
     resolve: {
-    // Add '.ts' and '.tsx' as resolvable extensions.
+        // Add '.ts' and '.tsx' as resolvable extensions.
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
 

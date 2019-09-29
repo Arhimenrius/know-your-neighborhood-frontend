@@ -1,6 +1,11 @@
 import * as React from 'react';
 import AddressesInputs from './AddressesInputs';
 import MoreOptionsInputs from './MoreOptionsInputs';
+import ICircle from '../../DataTypes/ICircle';
+import ICircleMarker from '../../DataTypes/ICircleMarker';
+import IMarker from '../../DataTypes/IMarker';
+import IPolyline from '../../DataTypes/IPolyline';
+import IPolygon from '../../DataTypes/IPolygon';
 
 interface ISearchData {
     checkAddress: {text: string, coordinates: {lat: number | null, lon: number | null}};
@@ -32,8 +37,20 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
         super(props);
         this.state = {
             searchData: {
-                checkAddress: { text: '', coordinates: { lat: null, lon: null } },
-                targetAddress: { text: '', coordinates: { lat: null, lon: null } },
+                checkAddress: {
+                    text: '',
+                    coordinates: {
+                        lat: null,
+                        lon: null,
+                    },
+                },
+                targetAddress: {
+                    text: '',
+                    coordinates: {
+                        lat: null,
+                        lon: null,
+                    },
+                },
                 servicesToDisplay: [],
                 otherOptions: {},
             },
@@ -54,12 +71,18 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
         switch (addressType) {
             case this.checkAddressInputName:
                 this.setState((prevState: Readonly<ComponentState>) => ({
-                    searchData: { ...prevState.searchData, checkAddress: value },
+                    searchData: {
+                        ...prevState.searchData,
+                        checkAddress: value,
+                    },
                 }));
                 break;
             case this.targetAddressInputName:
                 this.setState((prevState: Readonly<ComponentState>) => ({
-                    searchData: { ...prevState.searchData, targetAddress: value },
+                    searchData: {
+                        ...prevState.searchData,
+                        targetAddress: value,
+                    },
                 }));
                 break;
             default:
@@ -69,7 +92,10 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
 
     private handleOnServicesToDisplayChanged(services: string[]): void {
         this.setState((prevState: Readonly<ComponentState>) => ({
-            searchData: { ...prevState.searchData, servicesToDisplay: services },
+            searchData: {
+                ...prevState.searchData,
+                servicesToDisplay: services,
+            },
         }));
     }
 
@@ -79,7 +105,10 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
             otherOptions[optionName] = value;
 
             return {
-                searchData: { ...prevState.searchData, otherOptions },
+                searchData: {
+                    ...prevState.searchData,
+                    otherOptions,
+                },
             };
         });
     }
@@ -97,20 +126,82 @@ export default class SearchForm extends React.Component<ExpectedProps, Component
         const { onSearchResultsReceived } = this.props;
         const { searchData } = this.state;
 
-        const params: {[paramName: string]: number | null} = {
-            checkAddressLat: searchData.checkAddress.coordinates.lat,
-            checkAddressLon: searchData.checkAddress.coordinates.lon,
-            targetAddressLat: searchData.targetAddress.coordinates.lat,
-            targetAddressLon: searchData.targetAddress.coordinates.lon,
-        };
+        // const params: {[paramName: string]: number | null} = {
+        //     checkAddressLat: searchData.checkAddress.coordinates.lat,
+        //     checkAddressLon: searchData.checkAddress.coordinates.lon,
+        //     targetAddressLat: searchData.targetAddress.coordinates.lat,
+        //     targetAddressLon: searchData.targetAddress.coordinates.lon,
+        // };
+
         onSearchResultsReceived(
-            fetch('https://jsonplaceholder.typicode.com/todos?'
-                + `${Object.keys(params).map((paramName: string) => `${paramName}=${params[paramName]}`).join('&')}`)
-                .then(response => response.json())
-                .then(json => {
-                    console.log(json);
-                    return json;
-                }),
+            searchData.checkAddress,
+            searchData.targetAddress,
+            Promise.resolve({
+                results: [
+                    {
+                        'Group 1': {
+                            'Information 11': 'value 11',
+                            'Information 12': 'value 12',
+                            'Information 13': 'value 13',
+                        },
+                    },
+                    {
+                        'Group 2': {
+                            'Information 21': 'value 21',
+                            'Information 22': 'value 22',
+                            'Information 23': 'value 23',
+                        },
+                    },
+                ],
+                drawable: [
+                    {
+                        type: 'Circle',
+                        lat: 60.20,
+                        lon: 24.95,
+                        color: 'blue',
+                        popup: 'Dummy text',
+                        tooltip: 'Dummy tooltip',
+                        radius: 500,
+                    } as ICircle,
+                    {
+                        type: 'CircleMarker',
+                        lat: 60.19,
+                        lon: 24.97,
+                        fillColor: 'red',
+                        popup: 'Dummy text',
+                        tooltip: 'Dummy tooltip',
+                        radius: 10,
+                    } as ICircleMarker,
+                    {
+                        type: 'Marker',
+                        lat: 60.21,
+                        lon: 24.96,
+                        popup: 'Dummy text',
+                        tooltip: 'Dummy tooltip',
+                        radius: 500,
+                    } as IMarker,
+                    {
+                        type: 'Polyline',
+                        coordinates: [[60.31, 25], [60.31, 24.99], [60.33, 24.99]],
+                        color: 'orange',
+                        popup: 'Dummy text',
+                        tooltip: 'Dummy tooltip',
+                    } as IPolyline,
+                    {
+                        type: 'Polygon',
+                        coordinates: [[60.3, 25.1], [60.3, 25.12], [60.32, 25.12]],
+                        color: 'purple',
+                        popup: 'Dummy text',
+                        tooltip: 'Dummy tooltip',
+                    } as IPolygon,
+                ],
+            }),
+            // fetch('https://jsonplaceholder.typicode.com/todos?'
+            //     + `${Object.keys(params)
+            //         .map((paramName: string) => `${paramName}=${params[paramName]}`)
+            //         .join('&')}`)
+            //     .then(response => response.json())
+            //     .then(json => json),
         );
         event.preventDefault();
     }

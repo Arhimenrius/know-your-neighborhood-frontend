@@ -1,5 +1,6 @@
 import * as React from 'react';
 import AddressAutocomplete from './AddressAutocomplete';
+import IAddressData from '../../DataTypes/IAddressData';
 
 interface ComponentProps {
     displayTargetAddress: boolean;
@@ -8,20 +9,11 @@ interface ComponentProps {
     targetAddressInputName: string,
 }
 
-interface AddressData {
-    name: string,
-    postalcode: string,
-    localadmin: string,
-    coordinates: {lat: number, lon: number}
-}
-
 interface ComponentState {
     checkAddress: string;
     targetAddress: string;
-    checkAddressCoordinates: {lat: number | null, lon: number | null};
-    targetAddressCoordinates: {lat: number | null, lon: number | null};
-    checkAddressesToDisplay: AddressData[];
-    targetAddressesToDisplay: AddressData[];
+    checkAddressesToDisplay: IAddressData[];
+    targetAddressesToDisplay: IAddressData[];
 
     [name: string]: string | object;
 }
@@ -31,8 +23,6 @@ export default class AddressesInputs extends React.Component<ComponentProps, Com
 
     private readonly targetAddressStateName = 'targetAddress';
 
-    private readonly coordinatesStateSuffix = 'Coordinates';
-
     private readonly addressesToDisplayStateSuffix = 'esToDisplay';
 
     constructor(props: ComponentProps) {
@@ -40,8 +30,6 @@ export default class AddressesInputs extends React.Component<ComponentProps, Com
         this.state = {
             checkAddress: '',
             targetAddress: '',
-            checkAddressCoordinates: { lat: null, lon: null },
-            targetAddressCoordinates: { lat: null, lon: null },
             checkAddressesToDisplay: [],
             targetAddressesToDisplay: [],
         };
@@ -83,7 +71,10 @@ export default class AddressesInputs extends React.Component<ComponentProps, Com
                                     name,
                                     postalcode,
                                     localadmin,
-                                    coordinates: { lat: geometry.coordinates[1], lon: geometry.coordinates[0] },
+                                    coordinates: {
+                                        lat: geometry.coordinates[1],
+                                        lon: geometry.coordinates[0],
+                                    },
                                 };
                             },
                         );
@@ -100,7 +91,6 @@ export default class AddressesInputs extends React.Component<ComponentProps, Com
         this.setState(() => {
             const addressToChange: {[addressTypeCoordinates: string]: {}} = {};
             addressToChange[addressType] = result.text;
-            addressToChange[addressType + this.coordinatesStateSuffix] = result.coordinates;
             addressToChange[addressType + this.addressesToDisplayStateSuffix] = {};
 
             const { onAddressValueChange } = this.props;
